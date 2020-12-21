@@ -22,20 +22,17 @@ repetir = 'S'
 while repetir == 'S':
     pregunta = input("Título de la película: ")
 
-    respuesta = peticion(url_template.format(API_KEY, 's', pregunta))
-    if isinstance(respuesta, str):
-        print(respuesta)
-    else:
+    try:
+        respuesta = peticion(url_template.format(API_KEY, 's', pregunta))
         primera_peli = respuesta["Search"][0]
         clave = primera_peli["imdbID"]
 
         respuesta = peticion(url_template.format(API_KEY, 'i', clave))
-        if isinstance(respuesta, str):
-            print(respuesta)
-        else:
-            titulo = respuesta["Title"]
-            agno = respuesta["Year"]
-            director = respuesta["Director"]
-            print(f"La peli {titulo}, estrenada en el año {agno}, fue dirigida por {director}")
+        titulo = respuesta["Title"]
+        agno = respuesta["Year"]
+        director = respuesta["Director"]
+        print(f"La peli {titulo}, estrenada en el año {agno}, fue dirigida por {director}")
+    except PeticionError as e:
+        print(e)
 
     repetir = input("¿Quieres hacer otra búsqueda? (S/N) ").upper()
